@@ -1,0 +1,599 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>
+        Blog - My New Hugo Site
+      </title>
+        <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport"
+      content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="Cache-Control" content="no-transform" />
+    <meta http-equiv="Cache-Control" content="no-siteapp" />
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="format-detection" content="telephone=no,email=no,adress=no">
+    
+    <meta name="theme-color" content="#000000" />
+    
+    <meta http-equiv="window-target" content="_top" />
+    
+    
+    <meta name="description" content="关键词：线程池
+ 继承关系 先观察下 Executor 接口、ExecutorService 接口、AbstractExecutorService 抽象类、ThreadPoolExecutor 类、SchedualedThreadPoolExecutor 类、Executors 类、以及涉及到的 Future
+{% asset_img clipboard.png 图片 %}
+ Executor 接口 是函数式接口，只有一个参数为 Runnable 类型的方法。
+public interface Executor { void execute(Runnable command); }  ExecutorService 接口 继承 Executor 接口 submit 方法可以返回一个 Future 实例，通过 Future 中的 get 方法可以返回线程的运行结果。 注：不管怎样最后一定要shutdown线程池。 第三行：运行完当前线程之后，关闭线程池。 第四行：不管当前线程是否在运行，立刻关闭线程池。 第五行：返回结果是 Callable 中的 call 方法返回值。 第六行：返回结果是参数中的 T result。
+public interface ExecutorService extends Executor { boolean isShutdown(); void shutdown(); List&amp;lt;Runnable&amp;gt; shutdownNow(); &amp;lt;T&amp;gt; Future&amp;lt;T&amp;gt; submit(Callable&amp;lt;T&amp;gt; task); &amp;lt;T&amp;gt; Future&amp;lt;T&amp;gt; submit(Runnable task, T result); Future&amp;lt;?" />
+    <meta name="generator" content="Hugo 0.75.1 with theme pure" />
+    <title>Blog - My New Hugo Site</title>
+    
+    
+    <link rel="stylesheet" href="https://jasonzii.github.io/css/style.min.7dc20efbc53647d41aa9ddea0c48e59300223d084e66ea0cbe7c30bd88903acc.css">
+    
+    <link rel="stylesheet" href="https://cdn.staticfile.org/highlight.js/9.15.10/styles/github.min.css" async>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.css" async>
+    <meta property="og:title" content="Blog" />
+<meta property="og:description" content="关键词：线程池
+ 继承关系 先观察下 Executor 接口、ExecutorService 接口、AbstractExecutorService 抽象类、ThreadPoolExecutor 类、SchedualedThreadPoolExecutor 类、Executors 类、以及涉及到的 Future
+{% asset_img clipboard.png 图片 %}
+ Executor 接口 是函数式接口，只有一个参数为 Runnable 类型的方法。
+public interface Executor { void execute(Runnable command); }  ExecutorService 接口 继承 Executor 接口 submit 方法可以返回一个 Future 实例，通过 Future 中的 get 方法可以返回线程的运行结果。 注：不管怎样最后一定要shutdown线程池。 第三行：运行完当前线程之后，关闭线程池。 第四行：不管当前线程是否在运行，立刻关闭线程池。 第五行：返回结果是 Callable 中的 call 方法返回值。 第六行：返回结果是参数中的 T result。
+public interface ExecutorService extends Executor { boolean isShutdown(); void shutdown(); List&lt;Runnable&gt; shutdownNow(); &lt;T&gt; Future&lt;T&gt; submit(Callable&lt;T&gt; task); &lt;T&gt; Future&lt;T&gt; submit(Runnable task, T result); Future&lt;?" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://jasonzii.github.io/post/blog/" />
+<meta property="article:published_time" content="2020-11-07T23:32:14+08:00" />
+<meta property="article:modified_time" content="2020-11-07T23:32:14+08:00" />
+<meta itemprop="name" content="Blog">
+<meta itemprop="description" content="关键词：线程池
+ 继承关系 先观察下 Executor 接口、ExecutorService 接口、AbstractExecutorService 抽象类、ThreadPoolExecutor 类、SchedualedThreadPoolExecutor 类、Executors 类、以及涉及到的 Future
+{% asset_img clipboard.png 图片 %}
+ Executor 接口 是函数式接口，只有一个参数为 Runnable 类型的方法。
+public interface Executor { void execute(Runnable command); }  ExecutorService 接口 继承 Executor 接口 submit 方法可以返回一个 Future 实例，通过 Future 中的 get 方法可以返回线程的运行结果。 注：不管怎样最后一定要shutdown线程池。 第三行：运行完当前线程之后，关闭线程池。 第四行：不管当前线程是否在运行，立刻关闭线程池。 第五行：返回结果是 Callable 中的 call 方法返回值。 第六行：返回结果是参数中的 T result。
+public interface ExecutorService extends Executor { boolean isShutdown(); void shutdown(); List&lt;Runnable&gt; shutdownNow(); &lt;T&gt; Future&lt;T&gt; submit(Callable&lt;T&gt; task); &lt;T&gt; Future&lt;T&gt; submit(Runnable task, T result); Future&lt;?">
+<meta itemprop="datePublished" content="2020-11-07T23:32:14+08:00" />
+<meta itemprop="dateModified" content="2020-11-07T23:32:14+08:00" />
+<meta itemprop="wordCount" content="692">
+
+
+
+<meta itemprop="keywords" content="" />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Blog"/>
+<meta name="twitter:description" content="关键词：线程池
+ 继承关系 先观察下 Executor 接口、ExecutorService 接口、AbstractExecutorService 抽象类、ThreadPoolExecutor 类、SchedualedThreadPoolExecutor 类、Executors 类、以及涉及到的 Future
+{% asset_img clipboard.png 图片 %}
+ Executor 接口 是函数式接口，只有一个参数为 Runnable 类型的方法。
+public interface Executor { void execute(Runnable command); }  ExecutorService 接口 继承 Executor 接口 submit 方法可以返回一个 Future 实例，通过 Future 中的 get 方法可以返回线程的运行结果。 注：不管怎样最后一定要shutdown线程池。 第三行：运行完当前线程之后，关闭线程池。 第四行：不管当前线程是否在运行，立刻关闭线程池。 第五行：返回结果是 Callable 中的 call 方法返回值。 第六行：返回结果是参数中的 T result。
+public interface ExecutorService extends Executor { boolean isShutdown(); void shutdown(); List&lt;Runnable&gt; shutdownNow(); &lt;T&gt; Future&lt;T&gt; submit(Callable&lt;T&gt; task); &lt;T&gt; Future&lt;T&gt; submit(Runnable task, T result); Future&lt;?"/>
+
+    <!--[if lte IE 9]>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+      <![endif]-->
+
+    <!--[if lt IE 9]>
+        <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+      <![endif]-->
+  </head>
+
+  
+  
+
+  <body class="main-center theme-black" itemscope itemtype="http://schema.org/WebPage"><header class="header" itemscope itemtype="http://schema.org/WPHeader">
+    <div class="slimContent">
+      <div class="navbar-header">
+        <div class="profile-block text-center">
+          <a id="avatar" href="https://github.com/xiaoheiAh" target="_blank">
+            <img class="img-circle img-rotate" src="https://jasonzii.github.io/avatar.png" width="200" height="200">
+          </a>
+          <h2 id="name" class="hidden-xs hidden-sm">xiaoheiAh</h2>
+          <h3 id="title" class="hidden-xs hidden-sm hidden-md">author title</h3>
+          <small id="location" class="text-muted hidden-xs hidden-sm"><i class="icon icon-map-marker"></i>Shanghai, China</small>
+        </div><div class="search" id="search-form-wrap">
+    <form class="search-form sidebar-form">
+        <div class="input-group">
+            <input type="text" class="search-form-input form-control" placeholder="Search" />
+            <span class="input-group-btn">
+                <button type="submit" class="search-form-submit btn btn-flat" onclick="return false;"><i
+                        class="icon icon-search"></i></button>
+            </span>
+        </div>
+        <div class="ins-search">
+            <div class="ins-search-mask"></div>
+            <div class="ins-search-container">
+                <div class="ins-input-wrapper">
+                    <input type="text" class="ins-search-input" placeholder="Type something..."
+                        x-webkit-speech />
+                    <button type="button" class="close ins-close ins-selectable" data-dismiss="modal"
+                        aria-label="Close"><span aria-hidden="true">×</span></button>
+                </div>
+                <div class="ins-section-wrapper">
+                    <div class="ins-section-container"></div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+        <button class="navbar-toggle collapsed" type="button" data-toggle="collapse" data-target="#main-navbar" aria-controls="main-navbar" aria-expanded="false">
+          <span class="sr-only">Toggle navigation</span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+      </div>
+      <nav id="main-navbar" class="collapse navbar-collapse" itemscope itemtype="http://schema.org/SiteNavigationElement" role="navigation">
+        <ul class="nav navbar-nav main-nav">
+            <li class="menu-item menu-item-home">
+                <a href="/">
+                    <i class="icon icon-home-fill"></i>
+                  <span class="menu-title">Home</span>
+                </a>
+            </li>
+            <li class="menu-item menu-item-archives">
+                <a href="/posts/">
+                    <i class="icon icon-archives-fill"></i>
+                  <span class="menu-title">Archives</span>
+                </a>
+            </li>
+            <li class="menu-item menu-item-categories">
+                <a href="/categories/">
+                    <i class="icon icon-folder"></i>
+                  <span class="menu-title">Categories</span>
+                </a>
+            </li>
+            <li class="menu-item menu-item-tags">
+                <a href="/tags/">
+                    <i class="icon icon-tags"></i>
+                  <span class="menu-title">Tags</span>
+                </a>
+            </li>
+            <li class="menu-item menu-item-about">
+                <a href="/about/">
+                    <i class="icon icon-cup-fill"></i>
+                  <span class="menu-title">About</span>
+                </a>
+            </li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+<aside class="sidebar" itemscope itemtype="http://schema.org/WPSideBar">
+  <div class="slimContent">
+    
+      <div class="widget">
+    <h3 class="widget-title">Board</h3>
+    <div class="widget-body">
+        <div id="board">
+            <div class="content"><p>enjoy~</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+      <div class="widget">
+    <h3 class="widget-title"> Categories</h3>
+    <div class="widget-body">
+        <ul class="category-list">
+        </ul>
+    </div>
+</div>
+      <div class="widget">
+    <h3 class="widget-title"> Tags</h3>
+    <div class="widget-body">
+        <ul class="tag-list">
+            
+        </ul>
+
+    </div>
+</div>
+      
+<div class="widget">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget-body">
+        <ul class="recent-post-list list-unstyled no-thumbnail">
+        </ul>
+    </div>
+</div>
+  </div>
+</aside>
+
+    
+    
+<aside class="sidebar sidebar-toc collapse" id="collapseToc" itemscope itemtype="http://schema.org/WPSideBar">
+  <div class="slimContent">
+    <h4 class="toc-title">Catalogue</h4>
+    <nav id="toc" class="js-toc toc">
+
+    </nav>
+  </div>
+</aside>
+<main class="main" role="main"><div class="content">
+  <article id="-" class="article article-type-" itemscope
+    itemtype="http://schema.org/BlogPosting">
+    
+    <div class="article-header">
+      <h1 itemprop="name">
+  <a
+    class="article-title"
+    href="/post/blog/"
+    >Blog</a
+  >
+</h1>
+
+      <div class="article-meta">
+        
+<span class="article-date">
+  <i class="icon icon-calendar-check"></i>&nbsp;
+<a href="https://jasonzii.github.io/post/blog/" class="article-date">
+  <time datetime="2020-11-07 23:32:14 &#43;0800 CST" itemprop="datePublished">2020-11-07</time>
+</a>
+</span>
+
+
+        <span class="post-comment"><i class="icon icon-comment"></i>&nbsp;<a href="/post/blog/#comments"
+            class="article-comment-link">Comments</a></span>
+		<span class="post-wordcount hidden-xs" itemprop="wordCount">Word Count: 692words</span>
+		<span class="post-readcount hidden-xs" itemprop="timeRequired">Read Count: 4minutes </span>
+      </div>
+    </div>
+    <div class="article-entry marked-body js-toc-content" itemprop="articleBody">
+      <!-- raw HTML omitted -->
+<!-- raw HTML omitted -->
+<blockquote>
+<p>关键词：线程池</p>
+</blockquote>
+<h5 id="继承关系">继承关系</h5>
+<p>先观察下 Executor 接口、ExecutorService 接口、AbstractExecutorService 抽象类、ThreadPoolExecutor 类、SchedualedThreadPoolExecutor 类、Executors 类、以及涉及到的 Future</p>
+<!-- raw HTML omitted -->
+<p>{% asset_img clipboard.png 图片 %}</p>
+<hr>
+<h5 id="executor-接口">Executor 接口</h5>
+<p>是函数式接口，只有一个参数为 Runnable 类型的方法。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#66d9ef">public</span> <span style="color:#66d9ef">interface</span> <span style="color:#a6e22e">Executor</span> <span style="color:#f92672">{</span>
+    <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">execute</span><span style="color:#f92672">(</span>Runnable command<span style="color:#f92672">);</span>
+<span style="color:#f92672">}</span>
+</code></pre></div><hr>
+<h5 id="executorservice-接口">ExecutorService 接口</h5>
+<p>继承 Executor 接口
+submit 方法可以返回一个 Future 实例，通过 Future 中的 get 方法可以返回线程的运行结果。
+<code>注：不管怎样最后一定要shutdown线程池。</code>
+第三行：运行完当前线程之后，关闭线程池。
+第四行：不管当前线程是否在运行，立刻关闭线程池。
+第五行：返回结果是 Callable 中的 call 方法返回值。
+第六行：返回结果是参数中的 T result。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#66d9ef">public</span> <span style="color:#66d9ef">interface</span> <span style="color:#a6e22e">ExecutorService</span> <span style="color:#66d9ef">extends</span> Executor <span style="color:#f92672">{</span>
+    <span style="color:#66d9ef">boolean</span> <span style="color:#a6e22e">isShutdown</span><span style="color:#f92672">();</span>
+    <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">shutdown</span><span style="color:#f92672">();</span>
+    List<span style="color:#f92672">&lt;</span>Runnable<span style="color:#f92672">&gt;</span> <span style="color:#a6e22e">shutdownNow</span><span style="color:#f92672">();</span>
+    <span style="color:#f92672">&lt;</span>T<span style="color:#f92672">&gt;</span> Future<span style="color:#f92672">&lt;</span>T<span style="color:#f92672">&gt;</span> <span style="color:#a6e22e">submit</span><span style="color:#f92672">(</span>Callable<span style="color:#f92672">&lt;</span>T<span style="color:#f92672">&gt;</span> task<span style="color:#f92672">);</span>
+    <span style="color:#f92672">&lt;</span>T<span style="color:#f92672">&gt;</span> Future<span style="color:#f92672">&lt;</span>T<span style="color:#f92672">&gt;</span> <span style="color:#a6e22e">submit</span><span style="color:#f92672">(</span>Runnable task<span style="color:#f92672">,</span> T result<span style="color:#f92672">);</span>
+    Future<span style="color:#f92672">&lt;?&gt;</span> submit<span style="color:#f92672">(</span>Runnable task<span style="color:#f92672">);</span>
+    <span style="color:#f92672">...</span>
+<span style="color:#f92672">}</span>
+</code></pre></div><hr>
+<h5 id="abstractexecutorservice-抽象类--涉及到future">AbstractExecutorService 抽象类  ，涉及到Future</h5>
+<p>实现 ExecutorService 接口
+重写的 submit 方法中调用了 newTaskFor 方法，其中 FutureTask 和 RunnableFuture ，图二是其关系结构 FutureTask 实现了 RunnableFuture 接口，了解 FutureTask ，异步 Future 、FutureTask 、CompletionService.note
+<strong>重点：</strong>
+我们发现 newTaskFor <code>参数不管是 Runnable 还是 Callable 接口，返回值都是 FutureTask ， 再仔细观察下图二的关系，FutureTask 的爹是 RunnableFuture ，RunnableFuture 的爹是 Runnable ！！！那么 Executor 的execute 方法参数要求是 Runnable 就不难理解了。说白了 submit 和 execute 的区别就是 submit 返回了一个 FutureTask ，利用其 get 方法回调结果。</code>
+总结：
+submit 方法其实走的也是 execute 方法，execute方 法接收一个Runnable 参数，而 submit 方法为了得到线程返回值所以参数需要是 Callable（因为 Callable 的 get 方法可以返回结果），传入的 Callable 会作为参数，进而构造生成 FutureTask 对象，这样 FutureTask 就可以作为 execute 的方法参数了（ FutureTask 实现了 Runnable 接口）</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#66d9ef">public</span> <span style="color:#66d9ef">abstract</span> <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">AbstractExecutorService</span> <span style="color:#66d9ef">implements</span> ExecutorService <span style="color:#f92672">{</span>
+     <span style="color:#66d9ef">protected</span> <span style="color:#f92672">&lt;</span>T<span style="color:#f92672">&gt;</span> RunnableFuture<span style="color:#f92672">&lt;</span>T<span style="color:#f92672">&gt;</span> <span style="color:#a6e22e">newTaskFor</span><span style="color:#f92672">(</span>Callable<span style="color:#f92672">&lt;</span>T<span style="color:#f92672">&gt;</span> callable<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+        <span style="color:#66d9ef">return</span> <span style="color:#66d9ef">new</span> FutureTask<span style="color:#f92672">&lt;</span>T<span style="color:#f92672">&gt;(</span>callable<span style="color:#f92672">);</span>
+    <span style="color:#f92672">}</span>
+     <span style="color:#66d9ef">protected</span> <span style="color:#f92672">&lt;</span>T<span style="color:#f92672">&gt;</span> RunnableFuture<span style="color:#f92672">&lt;</span>T<span style="color:#f92672">&gt;</span> <span style="color:#a6e22e">newTaskFor</span><span style="color:#f92672">(</span>Runnable runnable<span style="color:#f92672">,</span> T value<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+        <span style="color:#66d9ef">return</span> <span style="color:#66d9ef">new</span> FutureTask<span style="color:#f92672">&lt;</span>T<span style="color:#f92672">&gt;(</span>runnable<span style="color:#f92672">,</span> value<span style="color:#f92672">);</span>
+    <span style="color:#f92672">}</span>      
+     <span style="color:#66d9ef">public</span> Future<span style="color:#f92672">&lt;?&gt;</span> submit<span style="color:#f92672">(</span>Runnable task<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+        <span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span>task <span style="color:#f92672">==</span> <span style="color:#66d9ef">null</span><span style="color:#f92672">)</span> <span style="color:#66d9ef">throw</span> <span style="color:#66d9ef">new</span> NullPointerException<span style="color:#f92672">();</span>
+        RunnableFuture<span style="color:#f92672">&lt;</span>Void<span style="color:#f92672">&gt;</span> ftask <span style="color:#f92672">=</span> newTaskFor<span style="color:#f92672">(</span>task<span style="color:#f92672">,</span> <span style="color:#66d9ef">null</span><span style="color:#f92672">);</span>
+        execute<span style="color:#f92672">(</span>ftask<span style="color:#f92672">);</span>
+        <span style="color:#66d9ef">return</span> ftask<span style="color:#f92672">;</span>
+    <span style="color:#f92672">}</span>
+    <span style="color:#66d9ef">public</span> <span style="color:#f92672">&lt;</span>T<span style="color:#f92672">&gt;</span> Future<span style="color:#f92672">&lt;</span>T<span style="color:#f92672">&gt;</span> <span style="color:#a6e22e">submit</span><span style="color:#f92672">(</span>Runnable task<span style="color:#f92672">,</span> T result<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+        <span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span>task <span style="color:#f92672">==</span> <span style="color:#66d9ef">null</span><span style="color:#f92672">)</span> <span style="color:#66d9ef">throw</span> <span style="color:#66d9ef">new</span> NullPointerException<span style="color:#f92672">();</span>
+        RunnableFuture<span style="color:#f92672">&lt;</span>T<span style="color:#f92672">&gt;</span> ftask <span style="color:#f92672">=</span> newTaskFor<span style="color:#f92672">(</span>task<span style="color:#f92672">,</span> result<span style="color:#f92672">);</span>
+        execute<span style="color:#f92672">(</span>ftask<span style="color:#f92672">);</span>
+        <span style="color:#66d9ef">return</span> ftask<span style="color:#f92672">;</span>
+    <span style="color:#f92672">}</span>
+    <span style="color:#66d9ef">public</span> <span style="color:#f92672">&lt;</span>T<span style="color:#f92672">&gt;</span> Future<span style="color:#f92672">&lt;</span>T<span style="color:#f92672">&gt;</span> <span style="color:#a6e22e">submit</span><span style="color:#f92672">(</span>Callable<span style="color:#f92672">&lt;</span>T<span style="color:#f92672">&gt;</span> task<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+        <span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span>task <span style="color:#f92672">==</span> <span style="color:#66d9ef">null</span><span style="color:#f92672">)</span> <span style="color:#66d9ef">throw</span> <span style="color:#66d9ef">new</span> NullPointerException<span style="color:#f92672">();</span>
+        RunnableFuture<span style="color:#f92672">&lt;</span>T<span style="color:#f92672">&gt;</span> ftask <span style="color:#f92672">=</span> newTaskFor<span style="color:#f92672">(</span>task<span style="color:#f92672">);</span>
+        execute<span style="color:#f92672">(</span>ftask<span style="color:#f92672">);</span>
+        <span style="color:#66d9ef">return</span> ftask<span style="color:#f92672">;</span>
+    <span style="color:#f92672">}</span>
+    <span style="color:#f92672">...</span>
+<span style="color:#f92672">}</span>
+</code></pre></div><hr>
+<h5 id="executors-类">Executors 类</h5>
+<p>没有任何继承和实现
+常用创建线程池的类，仔细观察他们的静态方法，其实都是 <code>ThreadPoolExecutor</code></p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#66d9ef">public</span> <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">Executors</span> <span style="color:#f92672">{</span>
+    <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">static</span> ExecutorService <span style="color:#a6e22e">newCachedThreadPool</span><span style="color:#f92672">()</span> <span style="color:#f92672">{</span>
+        <span style="color:#66d9ef">return</span> <span style="color:#66d9ef">new</span> ThreadPoolExecutor<span style="color:#f92672">(</span>0<span style="color:#f92672">,</span> Integer<span style="color:#f92672">.</span><span style="color:#a6e22e">MAX_VALUE</span><span style="color:#f92672">,</span>
+                                      60L<span style="color:#f92672">,</span> TimeUnit<span style="color:#f92672">.</span><span style="color:#a6e22e">SECONDS</span><span style="color:#f92672">,</span>
+                                      <span style="color:#66d9ef">new</span> SynchronousQueue<span style="color:#f92672">&lt;</span>Runnable<span style="color:#f92672">&gt;());</span>
+    <span style="color:#f92672">}</span>
+    <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">static</span> ExecutorService <span style="color:#a6e22e">newFixedThreadPool</span><span style="color:#f92672">(</span><span style="color:#66d9ef">int</span> nThreads<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+        <span style="color:#66d9ef">return</span> <span style="color:#66d9ef">new</span> ThreadPoolExecutor<span style="color:#f92672">(</span>nThreads<span style="color:#f92672">,</span> nThreads<span style="color:#f92672">,</span>
+                                      0L<span style="color:#f92672">,</span> TimeUnit<span style="color:#f92672">.</span><span style="color:#a6e22e">MILLISECONDS</span><span style="color:#f92672">,</span>
+                                      <span style="color:#66d9ef">new</span> LinkedBlockingQueue<span style="color:#f92672">&lt;</span>Runnable<span style="color:#f92672">&gt;());</span>
+    <span style="color:#f92672">}</span>
+    <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">static</span> ExecutorService <span style="color:#a6e22e">newSingleThreadExecutor</span><span style="color:#f92672">()</span> <span style="color:#f92672">{</span>
+        <span style="color:#66d9ef">return</span> <span style="color:#66d9ef">new</span> FinalizableDelegatedExecutorService
+            <span style="color:#f92672">(</span><span style="color:#66d9ef">new</span> ThreadPoolExecutor<span style="color:#f92672">(</span>1<span style="color:#f92672">,</span> 1<span style="color:#f92672">,</span>
+                                    0L<span style="color:#f92672">,</span> TimeUnit<span style="color:#f92672">.</span><span style="color:#a6e22e">MILLISECONDS</span><span style="color:#f92672">,</span>
+                                    <span style="color:#66d9ef">new</span> LinkedBlockingQueue<span style="color:#f92672">&lt;</span>Runnable<span style="color:#f92672">&gt;()));</span>
+    <span style="color:#f92672">}</span>
+    <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">static</span> ScheduledExecutorService <span style="color:#a6e22e">newScheduledThreadPool</span><span style="color:#f92672">(</span><span style="color:#66d9ef">int</span> corePoolSize<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+        <span style="color:#66d9ef">return</span> <span style="color:#66d9ef">new</span> ScheduledThreadPoolExecutor<span style="color:#f92672">(</span>corePoolSize<span style="color:#f92672">);</span>
+    <span style="color:#f92672">}</span>
+    <span style="color:#f92672">...</span>
+<span style="color:#f92672">}</span>
+</code></pre></div><hr>
+<h5 id="threadpoolexecutor-类">ThreadPoolExecutor 类</h5>
+<p>继承 AbstractExecutorService 抽象类
+说到 ThreadPoolExecutor ，当我们使用 Executors 创建线程池的时候，阿里规约不建议使用 Executors ，而建议使用手动创建 ThreadPoolExecutor 。 详情在图二</p>
+<p>ThreadPoolExecutor 重点在它的构造方法上，其构造方法中涉及到了阻塞队列（当线程池的实现原理.note）和线程池实现原理（Java并发小结：同步容器，并发容器，阻塞队列.note）的知识</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#66d9ef">public</span> <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">ThreadPoolExecutor</span> <span style="color:#66d9ef">extends</span> AbstractExecutorService <span style="color:#f92672">{</span>
+    <span style="color:#66d9ef">public</span> <span style="color:#a6e22e">ThreadPoolExecutor</span><span style="color:#f92672">(</span><span style="color:#66d9ef">int</span> corePoolSize<span style="color:#f92672">,</span>
+                              <span style="color:#66d9ef">int</span> maximumPoolSize<span style="color:#f92672">,</span>
+                              <span style="color:#66d9ef">long</span> keepAliveTime<span style="color:#f92672">,</span>
+                              TimeUnit unit<span style="color:#f92672">,</span>
+                              BlockingQueue<span style="color:#f92672">&lt;</span>Runnable<span style="color:#f92672">&gt;</span> workQueue<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+        <span style="color:#66d9ef">this</span><span style="color:#f92672">(</span>corePoolSize<span style="color:#f92672">,</span> maximumPoolSize<span style="color:#f92672">,</span> keepAliveTime<span style="color:#f92672">,</span> unit<span style="color:#f92672">,</span> workQueue<span style="color:#f92672">,</span>
+             Executors<span style="color:#f92672">.</span><span style="color:#a6e22e">defaultThreadFactory</span><span style="color:#f92672">(),</span> defaultHandler<span style="color:#f92672">);</span>
+    <span style="color:#f92672">}</span>
+    <span style="color:#66d9ef">public</span> <span style="color:#a6e22e">ThreadPoolExecutor</span><span style="color:#f92672">(</span><span style="color:#66d9ef">int</span> corePoolSize<span style="color:#f92672">,</span>
+                              <span style="color:#66d9ef">int</span> maximumPoolSize<span style="color:#f92672">,</span>
+                              <span style="color:#66d9ef">long</span> keepAliveTime<span style="color:#f92672">,</span>
+                              TimeUnit unit<span style="color:#f92672">,</span>
+                              BlockingQueue<span style="color:#f92672">&lt;</span>Runnable<span style="color:#f92672">&gt;</span> workQueue<span style="color:#f92672">,</span>
+                              ThreadFactory threadFactory<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+        <span style="color:#66d9ef">this</span><span style="color:#f92672">(</span>corePoolSize<span style="color:#f92672">,</span> maximumPoolSize<span style="color:#f92672">,</span> keepAliveTime<span style="color:#f92672">,</span> unit<span style="color:#f92672">,</span> workQueue<span style="color:#f92672">,</span>
+             threadFactory<span style="color:#f92672">,</span> defaultHandler<span style="color:#f92672">);</span>
+    <span style="color:#f92672">}</span>
+    <span style="color:#66d9ef">public</span> <span style="color:#a6e22e">ThreadPoolExecutor</span><span style="color:#f92672">(</span><span style="color:#66d9ef">int</span> corePoolSize<span style="color:#f92672">,</span>
+                              <span style="color:#66d9ef">int</span> maximumPoolSize<span style="color:#f92672">,</span>
+                              <span style="color:#66d9ef">long</span> keepAliveTime<span style="color:#f92672">,</span>
+                              TimeUnit unit<span style="color:#f92672">,</span>
+                              BlockingQueue<span style="color:#f92672">&lt;</span>Runnable<span style="color:#f92672">&gt;</span> workQueue<span style="color:#f92672">,</span>
+                              RejectedExecutionHandler handler<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+        <span style="color:#66d9ef">this</span><span style="color:#f92672">(</span>corePoolSize<span style="color:#f92672">,</span> maximumPoolSize<span style="color:#f92672">,</span> keepAliveTime<span style="color:#f92672">,</span> unit<span style="color:#f92672">,</span> workQueue<span style="color:#f92672">,</span>
+             Executors<span style="color:#f92672">.</span><span style="color:#a6e22e">defaultThreadFactory</span><span style="color:#f92672">(),</span> handler<span style="color:#f92672">);</span>
+    <span style="color:#f92672">}</span>
+    <span style="color:#66d9ef">public</span> <span style="color:#a6e22e">ThreadPoolExecutor</span><span style="color:#f92672">(</span><span style="color:#66d9ef">int</span> corePoolSize<span style="color:#f92672">,</span>
+                              <span style="color:#66d9ef">int</span> maximumPoolSize<span style="color:#f92672">,</span>
+                              <span style="color:#66d9ef">long</span> keepAliveTime<span style="color:#f92672">,</span>
+                              TimeUnit unit<span style="color:#f92672">,</span>
+                              BlockingQueue<span style="color:#f92672">&lt;</span>Runnable<span style="color:#f92672">&gt;</span> workQueue<span style="color:#f92672">,</span>
+                              ThreadFactory threadFactory<span style="color:#f92672">,</span>
+                              RejectedExecutionHandler handler<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+        <span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span>corePoolSize <span style="color:#f92672">&lt;</span> 0 <span style="color:#f92672">||</span>
+            maximumPoolSize <span style="color:#f92672">&lt;=</span> 0 <span style="color:#f92672">||</span>
+            maximumPoolSize <span style="color:#f92672">&lt;</span> corePoolSize <span style="color:#f92672">||</span>
+            keepAliveTime <span style="color:#f92672">&lt;</span> 0<span style="color:#f92672">)</span>
+            <span style="color:#66d9ef">throw</span> <span style="color:#66d9ef">new</span> IllegalArgumentException<span style="color:#f92672">();</span>
+        <span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span>workQueue <span style="color:#f92672">==</span> <span style="color:#66d9ef">null</span> <span style="color:#f92672">||</span> threadFactory <span style="color:#f92672">==</span> <span style="color:#66d9ef">null</span> <span style="color:#f92672">||</span> handler <span style="color:#f92672">==</span> <span style="color:#66d9ef">null</span><span style="color:#f92672">)</span>
+            <span style="color:#66d9ef">throw</span> <span style="color:#66d9ef">new</span> NullPointerException<span style="color:#f92672">();</span>
+        <span style="color:#66d9ef">this</span><span style="color:#f92672">.</span><span style="color:#a6e22e">corePoolSize</span> <span style="color:#f92672">=</span> corePoolSize<span style="color:#f92672">;</span>
+        <span style="color:#66d9ef">this</span><span style="color:#f92672">.</span><span style="color:#a6e22e">maximumPoolSize</span> <span style="color:#f92672">=</span> maximumPoolSize<span style="color:#f92672">;</span>
+        <span style="color:#66d9ef">this</span><span style="color:#f92672">.</span><span style="color:#a6e22e">workQueue</span> <span style="color:#f92672">=</span> workQueue<span style="color:#f92672">;</span>
+        <span style="color:#66d9ef">this</span><span style="color:#f92672">.</span><span style="color:#a6e22e">keepAliveTime</span> <span style="color:#f92672">=</span> unit<span style="color:#f92672">.</span><span style="color:#a6e22e">toNanos</span><span style="color:#f92672">(</span>keepAliveTime<span style="color:#f92672">);</span>
+        <span style="color:#66d9ef">this</span><span style="color:#f92672">.</span><span style="color:#a6e22e">threadFactory</span> <span style="color:#f92672">=</span> threadFactory<span style="color:#f92672">;</span>
+        <span style="color:#66d9ef">this</span><span style="color:#f92672">.</span><span style="color:#a6e22e">handler</span> <span style="color:#f92672">=</span> handler<span style="color:#f92672">;</span>
+    <span style="color:#f92672">}</span>
+    <span style="color:#f92672">...</span>
+    
+<span style="color:#f92672">}</span>
+</code></pre></div><p>用 Executors 创建线程池的时候，规避资源耗尽的风险，阿里代码规约建议使用三种方式创建</p>
+<ol>
+<li>new ScheduledExecutorService</li>
+<li>new ThreadPoolExecutor</li>
+<li>spring 方式 ThreadPoolTaskExecutor</li>
+</ol>
+<p>ExecutorService executorService = Executors.newCachedThreadPool();
+线程池不允许使用 Executors 去创建，而是通过 ThreadPoolExecutor 的方式，这样的处理方式让写的同学更加明确线程池的运行规则，规避资源耗尽的风险。 说明： Executors 各个方法的弊端：</p>
+<p>1）newFixedThreadPool 和 newSingleThreadExecutor: 主要问题是堆积的请求处理队列可能会耗费非常大的内存，甚至OOM。
+2）newCachedThreadPool 和 newScheduledThreadPool: 主要问题是线程数最大数是 Integer.MAX_VALUE ，可能会创建数量非常多的线程，甚至 OOM。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java">Positive example 1<span style="color:#960050;background-color:#1e0010">：</span>
+    <span style="color:#75715e">//org.apache.commons.lang3.concurrent.BasicThreadFactory
+</span><span style="color:#75715e"></span>    ScheduledExecutorService executorService <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> ScheduledThreadPoolExecutor<span style="color:#f92672">(</span>1<span style="color:#f92672">,</span>
+        <span style="color:#66d9ef">new</span> BasicThreadFactory<span style="color:#f92672">.</span><span style="color:#a6e22e">Builder</span><span style="color:#f92672">().</span><span style="color:#a6e22e">namingPattern</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;example-schedule-pool-%d&#34;</span><span style="color:#f92672">).</span><span style="color:#a6e22e">daemon</span><span style="color:#f92672">(</span><span style="color:#66d9ef">true</span><span style="color:#f92672">).</span><span style="color:#a6e22e">build</span><span style="color:#f92672">());</span>
+       
+        
+            
+Positive example 2<span style="color:#960050;background-color:#1e0010">：</span>
+    ThreadFactory namedThreadFactory <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> ThreadFactoryBuilder<span style="color:#f92672">()</span>
+        <span style="color:#f92672">.</span><span style="color:#a6e22e">setNameFormat</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;demo-pool-%d&#34;</span><span style="color:#f92672">).</span><span style="color:#a6e22e">build</span><span style="color:#f92672">();</span>
+
+    <span style="color:#75715e">//Common Thread Pool
+</span><span style="color:#75715e"></span>    ExecutorService pool <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> ThreadPoolExecutor<span style="color:#f92672">(</span>5<span style="color:#f92672">,</span> 200<span style="color:#f92672">,</span>
+        0L<span style="color:#f92672">,</span> TimeUnit<span style="color:#f92672">.</span><span style="color:#a6e22e">MILLISECONDS</span><span style="color:#f92672">,</span>
+        <span style="color:#66d9ef">new</span> LinkedBlockingQueue<span style="color:#f92672">&lt;</span>Runnable<span style="color:#f92672">&gt;(</span>1024<span style="color:#f92672">),</span> namedThreadFactory<span style="color:#f92672">,</span> <span style="color:#66d9ef">new</span> ThreadPoolExecutor<span style="color:#f92672">.</span><span style="color:#a6e22e">AbortPolicy</span><span style="color:#f92672">());</span>
+
+    pool<span style="color:#f92672">.</span><span style="color:#a6e22e">execute</span><span style="color:#f92672">(()-&gt;</span> System<span style="color:#f92672">.</span><span style="color:#a6e22e">out</span><span style="color:#f92672">.</span><span style="color:#a6e22e">println</span><span style="color:#f92672">(</span>Thread<span style="color:#f92672">.</span><span style="color:#a6e22e">currentThread</span><span style="color:#f92672">().</span><span style="color:#a6e22e">getName</span><span style="color:#f92672">()));</span>
+    pool<span style="color:#f92672">.</span><span style="color:#a6e22e">shutdown</span><span style="color:#f92672">();</span><span style="color:#75715e">//gracefully shutdown
+</span><span style="color:#75715e"></span>       
+        
+            
+Positive example 3<span style="color:#960050;background-color:#1e0010">：</span>
+    <span style="color:#f92672">&lt;</span>bean id<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;userThreadPool&#34;</span>
+        class<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor&#34;</span><span style="color:#f92672">&gt;</span>
+        <span style="color:#f92672">&lt;</span>property name<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;corePoolSize&#34;</span> value<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;10&#34;</span> <span style="color:#f92672">/&gt;</span>
+        <span style="color:#f92672">&lt;</span>property name<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;maxPoolSize&#34;</span> value<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;100&#34;</span> <span style="color:#f92672">/&gt;</span>
+        <span style="color:#f92672">&lt;</span>property name<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;queueCapacity&#34;</span> value<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;2000&#34;</span> <span style="color:#f92672">/&gt;</span>
+
+    <span style="color:#f92672">&lt;</span>property name<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;threadFactory&#34;</span> value<span style="color:#f92672">=</span> threadFactory <span style="color:#f92672">/&gt;</span>
+        <span style="color:#f92672">&lt;</span>property name<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;rejectedExecutionHandler&#34;</span><span style="color:#f92672">&gt;</span>
+            <span style="color:#f92672">&lt;</span>ref local<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;rejectedExecutionHandler&#34;</span> <span style="color:#f92672">/&gt;</span>
+        <span style="color:#f92672">&lt;/</span>property<span style="color:#f92672">&gt;</span>
+    <span style="color:#f92672">&lt;/</span>bean<span style="color:#f92672">&gt;</span>
+    <span style="color:#75715e">//in code
+</span><span style="color:#75715e"></span>    userThreadPool<span style="color:#f92672">.</span><span style="color:#a6e22e">execute</span><span style="color:#f92672">(</span>thread<span style="color:#f92672">);</span>
+</code></pre></div><hr>
+<h5 id="schedualedthreadpoolexecutor-类">SchedualedThreadPoolExecutor 类</h5>
+<p>继承 ThreadPoolExecutor 抽象类
+注：ScheduledThreadPoolExecutor 既继承 ThreadPoolExecutor 类，又实现了 ScheduledExecutorService  接口</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#66d9ef">public</span> <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">ScheduledThreadPoolExecutor</span>
+        <span style="color:#66d9ef">extends</span> ThreadPoolExecutor
+        <span style="color:#66d9ef">implements</span> ScheduledExecutorService <span style="color:#f92672">{</span>
+          
+            <span style="color:#66d9ef">public</span> <span style="color:#a6e22e">ScheduledThreadPoolExecutor</span><span style="color:#f92672">(</span><span style="color:#66d9ef">int</span> corePoolSize<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+                <span style="color:#66d9ef">super</span><span style="color:#f92672">(</span>corePoolSize<span style="color:#f92672">,</span> Integer<span style="color:#f92672">.</span><span style="color:#a6e22e">MAX_VALUE</span><span style="color:#f92672">,</span> 0<span style="color:#f92672">,</span> NANOSECONDS<span style="color:#f92672">,</span>
+                  <span style="color:#66d9ef">new</span> DelayedWorkQueue<span style="color:#f92672">());</span>
+            <span style="color:#f92672">}</span> 
+            <span style="color:#66d9ef">public</span> <span style="color:#a6e22e">ScheduledThreadPoolExecutor</span><span style="color:#f92672">(</span><span style="color:#66d9ef">int</span> corePoolSize<span style="color:#f92672">,</span>
+                                   ThreadFactory threadFactory<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+                <span style="color:#66d9ef">super</span><span style="color:#f92672">(</span>corePoolSize<span style="color:#f92672">,</span> Integer<span style="color:#f92672">.</span><span style="color:#a6e22e">MAX_VALUE</span><span style="color:#f92672">,</span> 0<span style="color:#f92672">,</span> NANOSECONDS<span style="color:#f92672">,</span>
+                  <span style="color:#66d9ef">new</span> DelayedWorkQueue<span style="color:#f92672">(),</span> threadFactory<span style="color:#f92672">);</span>
+            <span style="color:#f92672">}</span>
+            <span style="color:#66d9ef">public</span> <span style="color:#a6e22e">ScheduledThreadPoolExecutor</span><span style="color:#f92672">(</span><span style="color:#66d9ef">int</span> corePoolSize<span style="color:#f92672">,</span>
+                                               RejectedExecutionHandler handler<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+                <span style="color:#66d9ef">super</span><span style="color:#f92672">(</span>corePoolSize<span style="color:#f92672">,</span> Integer<span style="color:#f92672">.</span><span style="color:#a6e22e">MAX_VALUE</span><span style="color:#f92672">,</span> 0<span style="color:#f92672">,</span> NANOSECONDS<span style="color:#f92672">,</span>
+                      <span style="color:#66d9ef">new</span> DelayedWorkQueue<span style="color:#f92672">(),</span> handler<span style="color:#f92672">);</span>
+            <span style="color:#f92672">}</span>
+            <span style="color:#66d9ef">public</span> <span style="color:#a6e22e">ScheduledThreadPoolExecutor</span><span style="color:#f92672">(</span><span style="color:#66d9ef">int</span> corePoolSize<span style="color:#f92672">,</span>
+                                               ThreadFactory threadFactory<span style="color:#f92672">,</span>
+                                               RejectedExecutionHandler handler<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+                <span style="color:#66d9ef">super</span><span style="color:#f92672">(</span>corePoolSize<span style="color:#f92672">,</span> Integer<span style="color:#f92672">.</span><span style="color:#a6e22e">MAX_VALUE</span><span style="color:#f92672">,</span> 0<span style="color:#f92672">,</span> NANOSECONDS<span style="color:#f92672">,</span>
+                      <span style="color:#66d9ef">new</span> DelayedWorkQueue<span style="color:#f92672">(),</span> threadFactory<span style="color:#f92672">,</span> handler<span style="color:#f92672">);</span>
+            <span style="color:#f92672">}</span>
+            
+            <span style="color:#f92672">...</span>
+        <span style="color:#f92672">}</span>
+</code></pre></div><p>现在我们常用3种方式创建线程池：</p>
+<ol>
+<li>手动 new  ThreadPoolExecutor</li>
+<li>手动 new  ScheduledExecutorService</li>
+<li>Executors 静态方法。</li>
+</ol>
+<p>说一下 Executors 类创建线程池
+这个类是用来创建线程池的
+有这么几个方法
+<code>1、newFixedThreadPool() 创建固定大小的线程池 线程池的大小一旦达到最大值就会保持不变，如果某个线程因为执行异常而结束，那么线程池会补充一个新线程 2、newCachedThreadPool() 创建一个可缓存的线程池，如果线程池的大小超过了处理任务所需要的线程，那么就会回收部分空闲(60s不执行任务)的线程，当任务数量增加时，此线程池又可以智能的添加新线程来处理任务。此线程池不会对线程池大小做限制，线程池大小完全依赖于系统（JVM）能够创建的最大线程大小 3、newSingleThreadExecutor() 创建一个单线程的线程池。这个线程池只有线程在工作，也就是相当于单线程串行执行所有任务。如果这个唯一的线程因为异常结束，那么会有一个新的线程来替代它。此线程池保证所有任务的执行顺序按照任务的提交顺序执行 4、newScheduledThreadPool() 创建一个大小无限的线程池，此线程池支持定时以及周期性执行任务的需求 5、newSingleThreadScheduledExecutor() 创建一个单线程的线程池。此线程池支持定时以及周期性执行任务的需求</code></p>
+
+    </div>
+    <div class="article-footer">
+<blockquote class="mt-2x">
+  <ul class="post-copyright list-unstyled">
+    <li class="post-copyright-link hidden-xs">
+      <strong>Permalink: </strong>
+      <a href="https://jasonzii.github.io/post/blog/" title="Blog" target="_blank" rel="external">https://jasonzii.github.io/post/blog/</a>
+    </li>
+    <li class="post-copyright-license">
+      <strong>License：</strong><a href="http://creativecommons.org/licenses/by/4.0/deed.zh" target="_blank" rel="external">CC BY 4.0 CN</a>
+    </li>
+  </ul>
+</blockquote>
+
+<div class="panel panel-default panel-badger">
+  <div class="panel-body">
+    <figure class="media">
+      <div class="media-left">
+        <a href="https://github.com/xiaoheiAh" target="_blank" class="img-burn thumb-sm visible-lg">
+          <img src="https://jasonzii.github.io/avatar.png" class="img-rounded w-full" alt="">
+        </a>
+      </div>
+      <div class="media-body">
+        <h3 class="media-heading"><a href="https://github.com/xiaoheiAh" target="_blank"><span class="text-dark">xiaoheiAh</span><small class="ml-1x">author title</small></a></h3>
+        <div>Good Good Study, Day Day Up~</div>
+      </div>
+    </figure>
+  </div>
+</div>
+    </div>
+  </article>
+<section id="comments">
+</section>
+
+</div><nav class="bar bar-footer clearfix" data-stick-bottom>
+    <div class="bar-inner">
+        <div class="bar-right">
+            <div class="share-component" data-sites="weibo,qq,wechat,facebook,twitter"
+                data-mobile-sites="weibo,qq,qzone"></div>
+        </div>
+    </div>
+</nav>
+
+</main><footer class="footer" itemscope itemtype="http://schema.org/WPFooter">
+<ul class="social-links">
+    <li><a href="https://github.com/xiaoheiAh" target="_blank" title="github" data-toggle=tooltip data-placement=top >
+            <i class="icon icon-github"></i></a></li>
+    <li><a href="https://jasonzii.github.io/index.xml" target="_blank" title="rss" data-toggle=tooltip data-placement=top >
+            <i class="icon icon-rss"></i></a></li>
+</ul>
+  <div class="copyright">
+    &copy;2017  -
+    2020
+    <div class="publishby">
+        Theme by <a href="https://github.com/xiaoheiAh" target="_blank"> xiaoheiAh </a>base on<a href="https://github.com/xiaoheiAh/hugo-theme-pure" target="_blank"> pure</a>.
+    </div>
+  </div>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_SVG"></script>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+            showMathMenu: false, //disables context menu
+            tex2jax: {
+            inlineMath: [ ['$','$'], ['\\(','\\)'] ]
+           }
+    });
+</script>
+
+
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.4.1/dist/jquery.min.js"></script>
+<script>
+    window.jQuery || document.write('<script src="js/jquery.min.js"><\/script>')
+</script>
+<script type="text/javascript" src="https://cdn.staticfile.org/highlight.js/9.15.10/highlight.min.js"></script>
+<script type="text/javascript" src="https://cdn.staticfile.org/highlight.js/9.15.10/languages/python.min.js" defer></script>
+<script type="text/javascript" src="https://cdn.staticfile.org/highlight.js/9.15.10/languages/javascript.min.js" defer></script><script>
+    hljs.configure({
+        tabReplace: '    ', 
+        classPrefix: ''     
+        
+    })
+    hljs.initHighlightingOnLoad();
+</script>
+<script src="https://jasonzii.github.io/js/application.min.bdeb64b910570b6c41badc6a05b7afb0c8ad9efd8525de3c7257d59e786326a3.js"></script>
+<script src="https://jasonzii.github.io/js/plugin.min.51ff8c7317566f82259170fa36e09c4493adc9b9378b427a01ad3f017ebac7dd.js"></script>
+
+<script>
+    (function (window) {
+        var INSIGHT_CONFIG = {
+            TRANSLATION: {
+                POSTS: 'Posts',
+                PAGES: 'Pages',
+                CATEGORIES: 'Categories',
+                TAGS: 'Tags',
+                UNTITLED: '(Untitled)',
+            },
+            ROOT_URL: 'https:\/\/jasonzii.github.io\/',
+            CONTENT_URL: 'https:\/\/jasonzii.github.io\/\/searchindex.json ',
+        };
+        window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+    })(window);
+</script>
+<script type="text/javascript" src="https://jasonzii.github.io/js/insight.min.a343cd9a5a7698336b28ef3a7c16a3a1b1d2d5fb17dc8ed04022bbe08cc5459073a15bdafa3a8a58cdd56080784bdd69fa70b1ae8597565c799c57ed00f0e120.js" defer></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.min.js"></script>
+<script>
+    tocbot.init({
+        
+        tocSelector: '.js-toc',
+        
+        contentSelector: '.js-toc-content',
+        
+        headingSelector: 'h1, h2, h3',
+        
+        hasInnerContainers: true,
+    });
+</script>
+
+  </body>
+</html>
