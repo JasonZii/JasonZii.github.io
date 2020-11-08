@@ -1,22 +1,18 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>My New Hugo Site</title>
-    <link>https://jasonzii.github.io/</link>
+    <link>//jasonzii.github.io/</link>
     <description>Recent content on My New Hugo Site</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Sat, 07 Nov 2020 23:32:14 +0800</lastBuildDate>
-    
-        <atom:link href="https://jasonzii.github.io/index.xml" rel="self" type="application/rss+xml" />
-    
-    
+    <lastBuildDate>Sat, 07 Nov 2020 23:32:14 +0800</lastBuildDate><atom:link href="//jasonzii.github.io/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Blog</title>
-      <link>https://jasonzii.github.io/post/blog/</link>
+      <link>//jasonzii.github.io/post/blog/</link>
       <pubDate>Sat, 07 Nov 2020 23:32:14 +0800</pubDate>
       
-      <guid>https://jasonzii.github.io/post/blog/</guid>
+      <guid>//jasonzii.github.io/post/blog/</guid>
       <description>关键词：线程池
  继承关系 先观察下 Executor 接口、ExecutorService 接口、AbstractExecutorService 抽象类、ThreadPoolExecutor 类、SchedualedThreadPoolExecutor 类、Executors 类、以及涉及到的 Future
 {% asset_img clipboard.png 图片 %}
